@@ -22,9 +22,6 @@ export const SpanLain = styled.span`
     ${({ btnCheck }) => btnCheck && css`
         text-decoration: line-through;
     `}
-
-
-    text-decoration: ${({ done }) => done && 'line-through'};
  `
 
 export const Button = styled.button`

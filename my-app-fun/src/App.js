@@ -6,10 +6,10 @@ import React, { useState, useRef } from 'react';
 function App() {
   const list =
     [
-      { title: 'Buy car signal lights', id: 1, btnCheck: true, EditState: true },
-      { title: 'Return bicycle brakes', id: 2, btnCheck: false, EditState: true },
-      { title: 'Buy A4 papers', id: 3, btnCheck: true, EditState: true },
-      { title: 'Install grarge shed', id: 4, btnCheck: false, EditState: true }
+      { title: 'Buy car signal lights', id: 1, btnCheck: true, done: true },
+      { title: 'Return bicycle brakes', id: 2, btnCheck: false, done: true },
+      { title: 'Buy A4 papers', id: 3, btnCheck: true, done: true },
+      { title: 'Install grarge shed', id: 4, btnCheck: false, done: true }
     ]
   const listId = useRef(4);
   const [addList, setAddList] = useState(list);
@@ -26,7 +26,7 @@ function App() {
     if (e.key === 'Enter') {
       listId.current++;
       const nextState = produce(addList, draftState => {
-        draftState.push({ title: inputValue, id: listId.current, btnCheck: false, EditState: true })
+        draftState.push({ title: inputValue, id: listId.current, btnCheck: false, done: true })
       })
       setAddList(nextState)
       setInptValue('');
@@ -45,7 +45,7 @@ function App() {
   const handleClickEditIcon = (id) => {
     const nextState = produce(addList, draftState => {
       const idx = draftState.findIndex(i => i.id === id);
-      draftState[idx].EditState = false;
+      draftState[idx].done = false;
       setInfoValue(draftState[idx].title)
     })
     setAddList(nextState);
@@ -56,7 +56,7 @@ function App() {
     const nextState = produce(addList, draftState => {
       const idx = draftState.findIndex((info) => info.id === id);
       draftState[idx].title = infoValue;
-      draftState[idx].EditState = true;
+      draftState[idx].done = true;
     })
     setAddList(nextState);
   }

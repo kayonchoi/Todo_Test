@@ -4,7 +4,7 @@ import { SpanLain } from './TodoStyle';
 function TodoInfo(props) {
     return (
         <>
-            { props.data.EditState ?
+            { props.data.done ?
                 (
                     <label>
                         <input type="checkBox" checked={props.data.btnCheck} onChange={() => props.handleCheckClick(props.data)} />

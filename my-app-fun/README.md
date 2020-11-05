@@ -1,70 +1,253 @@
-# Getting Started with Create React App
+# Step 1 ) ToDo 만들기
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## 사용한 라이브러리
+* styled-Components
+* immer
+* useState , useRef
 
-## Available Scripts
+## 컴포넌트 구조
+* App.js
+* TodoLit.js
+* TodoInfo.js
 
-In the project directory, you can run:
+* AppStyle.js
+* TodoStyle.js
 
-### `yarn start`
+---
+ 
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## App.js 
+```
+import { Body } from './AppStyle.js';
+import TodoList from '../src/componets/TodoList';
+import produce from 'immer';
+import React, { useState, useRef } from 'react';
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+function App() {
+  const list =
+    [
+      { title: 'Buy car signal lights', id: 1, btnCheck: true, done: true },
+      { title: 'Return bicycle brakes', id: 2, btnCheck: false, done: true },
+      { title: 'Buy A4 papers', id: 3, btnCheck: true, done: true },
+      { title: 'Install grarge shed', id: 4, btnCheck: false, done: true }
+    ]
+  const listId = useRef(4);
+  const [addList, setAddList] = useState(list);
+  const [inputValue, setInptValue] = useState('');
+  const [infoValue, setInfoValue] = useState('');
 
-### `yarn test`
+  //App InputChange Event
+  const handleChage = (e) => {
+    setInptValue(e.target.value);
+  }
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+  //App Enter Keypress Event & InsertData 
+  const handleOnKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      listId.current++;
+      const nextState = produce(addList, draftState => {
+        draftState.push({ title: inputValue, id: listId.current, btnCheck: false, done: true })
+      })
+      setAddList(nextState)
+      setInptValue('');
+    }
+  }
 
-### `yarn build`
+  //Delete Event
+  const handleClickDelete = (id) => {
+    const nextState = produce(addList, draftState => {
+      draftState.splice(draftState.findIndex((info) => info.id === id), 1)
+    })
+    setAddList(nextState);
+  }
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+  //Edit Event
+  const handleClickEditIcon = (id) => {
+    const nextState = produce(addList, draftState => {
+      const idx = draftState.findIndex(i => i.id === id);
+      draftState[idx].done = false;
+      setInfoValue(draftState[idx].title)
+    })
+    setAddList(nextState);
+  }
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+  //수정완료 Event
+  const handleClick = (id) => {
+    const nextState = produce(addList, draftState => {
+      const idx = draftState.findIndex((info) => info.id === id);
+      draftState[idx].title = infoValue;
+      draftState[idx].done = true;
+    })
+    setAddList(nextState);
+  }
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+  //ListInfoChange Event
+  const handleOnChange = (e) => {
+    setInfoValue(e.target.value);
+  }
 
-### `yarn eject`
+  //CheckBoxState Event
+  const handleCheckClick = (infoData) => {
+    const nextState = produce(addList, draftState => {
+      const index = draftState.findIndex((info) => infoData.id === info.id);
+      if (draftState[index].btnCheck) {
+        draftState[index].btnCheck = false;
+      } else {
+        draftState[index].btnCheck = true;
+      }
+    });
+    setAddList(nextState);
+  }
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+  return (
+    <Body>
+      <div>
+        <h1>My Todo</h1>
+      </div>
+      <div>
+        <input type="text" value={inputValue} placeholder="Input task name then tap Enter to add"
+          onKeyPress={handleOnKeyPress} onChange={handleChage}
+        />
+      </div>
+      <TodoList
+        list={addList}
+        handleCheckClick={handleCheckClick}
+        handleClick={handleClick}
+        handleClickDelete={handleClickDelete}
+        handleClickEditIcon={handleClickEditIcon}
+        handleOnChange={handleOnChange}
+      />
+    </Body>
+  );
+}
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+export default App;
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+```
+---
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+## TodoList.js
+```
+import React from 'react';
+import TodoInfo from './TodoInfo';
+import { AiFillEdit, AiFillDelete } from "react-icons/ai";
+import { Content, Button } from './TodoStyle';
 
-## Learn More
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+function TodoList(props) {
+    return (
+        <div className='TodoList-view'>
+            {props.list.map((data, indx) =>
+                <Content key={indx}>
+                    <div className="TodoList-content-data">
+                        <TodoInfo data={data} handleOnChange={props.handleOnChange} handleCheckClick={props.handleCheckClick} />
+                    </div>
+                    {data.done ? (
+                        <div className="TodoList-content-icon">
+                            {data.btnCheck ? (
+                                <>
+                                    <AiFillEdit onClick={(e) => e.preventDefault()} />
+                                    <AiFillDelete onClick={() => props.handleClickDelete(data.id)} />
+                                </>
+                            ) : (
+                                    <>
+                                        <AiFillEdit onClick={() => props.handleClickEditIcon(data.id)} />
+                                        <AiFillDelete onClick={() => props.handleClickDelete(data.id)} />
+                                    </>
+                                )
+                            }
+                        </div>
+                    ) : (
+                            <div className="TodoList-content-icon">
+                                <Button onClick={() => props.handleClick(data.id)}>수정</Button>
+                                <AiFillDelete onClick={() => props.handleClickDelete(data.id)} />
+                            </div>
+                        )
+                    }
+                </Content>
+            )}
+        </div>
+    )
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+}
 
-### Code Splitting
+export default TodoList;
+```
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+## TodoInfo.js
+```
+import React from 'react';
+import { SpanLain } from './TodoStyle';
 
-### Analyzing the Bundle Size
+function TodoInfo(props) {
+    return (
+        <>
+            { props.data.done ?
+                (
+                    <label>
+                        <input type="checkBox" checked={props.data.btnCheck} onChange={() => props.handleCheckClick(props.data)} />
+                        <SpanLain btnCheck={props.data.btnCheck}>{props.data.title}</SpanLain>
+                    </label>
+                ) : (
+                    <label>
+                        <input type="checkBox" />
+                        <input type="text" onChange={props.handleOnChange} defaultValue={props.data.title} />
+                    </label>
+                )
+            }
+        </>
+    )
+}
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+export default TodoInfo;
+```
 
-### Making a Progressive Web App
+---
+## TodoStyle.js
+```
+import styled, { css } from 'styled-components';
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+export const Content = styled.div`
+    border: 1px solid blue;
+    margin-top: 10px;
 
-### Advanced Configuration
+    .TodoList-content-data{
+        display: inline;
+    }
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+    .TodoList-content-icon{
+        float: right;
 
-### Deployment
+        > button {
+            width: 40px;
+        }
+    }
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+`
 
-### `yarn build` fails to minify
+export const SpanLain = styled.span`
+    ${({ btnCheck }) => btnCheck && css`
+        text-decoration: line-through;
+    `}
+ `
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+export const Button = styled.button`
+    height : 20px;
+    width : 63px;
+ `
+```
+---
+
+## AppStyle.js
+```
+import styled from 'styled-components';
+
+export const Body = styled.div`
+    margin: 10px;
+    width: 300px;
+    height: 400px;
+    border: 1px solid;
+`
+
+```

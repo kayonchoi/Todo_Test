@@ -12,7 +12,7 @@ function TodoList(props) {
                     <div className="TodoList-content-data">
                         <TodoInfo data={data} handleOnChange={props.handleOnChange} handleCheckClick={props.handleCheckClick} />
                     </div>
-                    {data.EditState ? (
+                    {data.done ? (
                         <div className="TodoList-content-icon">
                             {data.btnCheck ? (
                                 <>

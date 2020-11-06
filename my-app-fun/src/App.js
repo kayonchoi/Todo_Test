@@ -1,7 +1,9 @@
-import { Body } from './AppStyle.js';
-import TodoList from '../src/componets/TodoList';
-import produce from 'immer';
 import React, { useState, useRef } from 'react';
+import produce from 'immer';
+
+import TodoList from '../src/componets/Todo/TodoList';
+
+import { Body } from './AppStyle.js';
 
 function App() {
   const list =
@@ -28,7 +30,7 @@ function App() {
       const nextState = produce(addList, draftState => {
         draftState.push({ title: inputValue, id: listId.current, btnCheck: false, done: true })
       })
-      setAddList(nextState)
+      setAddList(nextState);
       setInptValue('');
     }
   }
@@ -36,7 +38,8 @@ function App() {
   //Delete Event
   const handleClickDelete = (id) => {
     const nextState = produce(addList, draftState => {
-      draftState.splice(draftState.findIndex((info) => info.id === id), 1)
+      const idx = draftState.findIndex((info) => info.id === id);
+      draftState.splice(idx, 1)
     })
     setAddList(nextState);
   }
@@ -81,22 +84,24 @@ function App() {
 
   return (
     <Body>
-      <div>
-        <h1>My Todo</h1>
-      </div>
-      <div>
-        <input type="text" value={inputValue} placeholder="Input task name then tap Enter to add"
-          onKeyPress={handleOnKeyPress} onChange={handleChage}
+      <form type="submit">
+        <div>
+          <h1>My Todo</h1>
+        </div>
+        <div>
+          <input type="text" value={inputValue} placeholder="Input task name then tap Enter to add"
+            onKeyPress={handleOnKeyPress} onChange={handleChage}
+          />
+        </div>
+        <TodoList
+          list={addList}
+          handleCheckClick={handleCheckClick}
+          handleClick={handleClick}
+          handleClickDelete={handleClickDelete}
+          handleClickEditIcon={handleClickEditIcon}
+          handleOnChange={handleOnChange}
         />
-      </div>
-      <TodoList
-        list={addList}
-        handleCheckClick={handleCheckClick}
-        handleClick={handleClick}
-        handleClickDelete={handleClickDelete}
-        handleClickEditIcon={handleClickEditIcon}
-        handleOnChange={handleOnChange}
-      />
+      </form>
     </Body>
   );
 }

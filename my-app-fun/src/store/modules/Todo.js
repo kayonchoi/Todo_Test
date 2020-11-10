@@ -1,50 +1,53 @@
 import produce from 'immer';
-import { useRef } from 'react';
-import { createAction } from 'redux-actions';
+import { createAction, handleActions } from 'redux-actions';
 
-//action Type 선언
 export const INSERTLIST = 'INSERTLIST';
 export const EDITLIST = 'EDITLIST';
 export const DELETELIST = 'DELETELIST';
+export const UPDATEBTNSTATE = 'UPDATEBTNSTATE';
+export const BACKBTN = 'BACKBTN';
 
-//action fun 생성
-export const insetList = createAction('INSERTLIST');
-export const editList = createAction('EDITLIST');
-export const deleteList = createAction('DELETELIST');
+let listId = 5;
+export const insetList = createAction('INSERTLIST', test => test);
+export const editList = createAction('EDITLIST', data => data);
+export const deleteList = createAction('DELETELIST', id => id);
+export const updateBtnState = createAction('UPDATEBTNSTATE', id => id);
+export const backbtn = createAction('BACKBTN', data => data);
 
-//초기값 선언
 const initState = [
-    { title: 'Buy car signal lights', id: 1, btnCheck: true, done: true },
-    { title: 'Return bicycle brakes', id: 2, btnCheck: false, done: true },
-    { title: 'Buy A4 papers', id: 3, btnCheck: true, done: true },
-    { title: 'Install grarge shed', id: 4, btnCheck: false, done: true }
+    { title: 'Buy car signal lights', id: 1, btnCheck: true },
+    { title: 'Return bicycle brakes', id: 2, btnCheck: false },
+    { title: 'Buy A4 papers', id: 3, btnCheck: true },
+    { title: 'Install grarge shed', id: 4, btnCheck: false }
 ]
-// const listId = useRef(4);
 
 //리듀서 생성
-// export const todoReducer = (state = initState, action) => {
-//     return produce(state, (draftState) => {
-//         switch (action.type) {
-//             case 'INSERTLIST':
-//                 listId.current++;
-//                 draftState.push({ title: action.title, id: listId.current, btnCheck: false, done: true })
-//                 break;
-
-//             case 'EDITLIST':
-//                 const idx = draftState.findIndex(i => i.id === action.id);
-//                 draftState[idx].done = false;
-//                 break;
-
-//             case 'DELETELIST':
-//                 const idx2 = draftState.findIndex((info) => info.id === action.id);
-//                 draftState.splice(idx2, 1)
-//                 break;
-
-//             default:
-//                 state
-//                 break;
-//         }
-//     })
-// }
-
-
+export default handleActions({
+    [INSERTLIST]: (initState, action) => {
+        return produce(initState, draft => {
+            draft.push({ title: action.payload, id: listId++, btnCheck: false})
+        })
+    },
+    [DELETELIST]: (initState, action) => {
+        return produce(initState, draft => {
+            const idx = draft.findIndex((info) => info.id === action.payload);
+            draft.splice(idx, 1)
+        })
+    },
+    [EDITLIST]: (initState, action) => {
+        return produce(initState, draft => {
+            const idx = draft.findIndex((info) => info.id === action.payload.data.id);
+            draft[idx].title = action.payload.value;
+        })
+    },
+    [UPDATEBTNSTATE]: (initState, action) => {
+        return produce(initState, draft => {
+            const idx = draft.findIndex((info) => info.id === action.payload);
+            if (draft[idx].btnCheck) {
+                draft[idx].btnCheck = false
+            } else {
+                draft[idx].btnCheck = true
+            }
+        })
+    }
+}, initState)

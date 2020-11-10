@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import TodoList from './componets/Todo/TodoList';
 import { insetList } from './store/modules/Todo';
-import { Body } from './Styled';
+import { Body, Input, Title } from './Styled';
 
 function App() {
   const list = useSelector((state) => state.handleActions);
@@ -23,10 +23,10 @@ function App() {
   return (
     <Body>
       <div>
-        <h1>My Todo</h1>
+        <Title>My Todo</Title>
       </div>
       <div>
-        <input type="text" value={inputValue} placeholder="Input task name then tap Enter to add"
+        <Input type="text" value={inputValue} placeholder="Input task name then tap Enter to add"
           onKeyPress={handleOnKeyPress} onChange={handleChage}
         />
       </div>
@@ -34,5 +34,4 @@ function App() {
     </Body>
   );
 }
-
 export default App;

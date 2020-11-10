@@ -1,10 +1,10 @@
 import React from 'react';
 import TodoInfo from './TodoInfo';
-import { Content } from './Styled';
+import { ListWrap ,Content } from './Styled';
 
 function TodoList({ list }) {
     return (
-        <div className='TodoList-view'>
+        <ListWrap>
             {list.map((data) =>
                 <Content key={data.id}>
                     <div className="TodoList-content-data">
@@ -12,9 +12,7 @@ function TodoList({ list }) {
                     </div>
                 </Content>
             )}
-        </div>
+        </ListWrap>
     )
-
 }
-
 export default TodoList;

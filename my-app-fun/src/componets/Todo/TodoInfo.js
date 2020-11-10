@@ -1,39 +1,67 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { AiFillEdit, AiFillDelete } from "react-icons/ai";
+import { editList, updateBtnState, deleteList, backbtn } from '../../store/modules/Todo';
 import { SpanLain, Button } from './Styled';
 
-function TodoInfo({ data, handleCheckClick, handleClick, handleClickDelete, handleClickEditIcon, handleOnChange }) {
+function TodoInfo({ data }) {
+    const dispatch = useDispatch();
+    const [infoValue, setInfoValue] = useState('');
+    const [done, setDone] = useState(true);
 
-    function editEventState(id) {
-        console.log("###", id)
-        if(1){
+    const handleCheckClick = (id) => {
+        dispatch(updateBtnState(id))
+    }
 
+    const handleOnChange = (e) => {
+        setInfoValue(e.target.value);
+    }
+
+    const handleEditEventState = (list) => {
+        if (data.btnCheck && data.id === list.id) {
+            return false;
+        } else{
+            setDone(false)
         }
     }
+
+    const handleEdit = (list) => {
+        let value_ = infoValue;
+        if (value_ === '') {
+            value_ = data.title
+        }
+        dispatch(editList({ data: list, value: value_ }))
+        setDone(true)
+    }
+
+    const handleBackBtn =() => {
+        setDone(true)
+    }
+
     return (
         <>
-            { data.done ?
+            {done ?
                 (
                     <>
                         <label>
-                            <input type="checkBox" checked={data.btnCheck} onChange={() => handleCheckClick(data)} />
+                            <input type="checkBox" checked={data.btnCheck} onChange={() => handleCheckClick(data.id)} />
                             <SpanLain btnCheck={data.btnCheck}>{data.title}</SpanLain>
                         </label>
                         <div className="TodoList-content-icon">
-                            <AiFillEdit onClick={() => editEventState(data.id)} />
-                            <AiFillDelete onClick={() => handleClickDelete(data.id)} />
+                            <AiFillEdit onClick={() => handleEditEventState(data)} />
+                            <AiFillDelete onClick={() => dispatch(deleteList(data.id))} />
                         </div>
                     </>
                 ) : (
                     <>
                         <label>
-                            <input type="checkBox" />
+                            <input type="checkBox" checked={data.btnCheck}/>
                             <input type="text" onChange={handleOnChange} defaultValue={data.title} />
                         </label>
                         <div className="TodoList-content-icon">
-                            <Button onClick={console.log("#")}>취소</Button>
-                            <Button onClick={() => handleClick(data.id)}>수정</Button>
-                            <AiFillDelete onClick={() => handleClickDelete(data.id)} />
+                            <Button onClick={() => handleBackBtn()}>취소</Button>
+                            <Button onClick={() => handleEdit(data)}>수정</Button>
+                            <AiFillDelete onClick={() => dispatch(deleteList(data.id))} />
                         </div>
                     </>
                 )

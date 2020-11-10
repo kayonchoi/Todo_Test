@@ -1,18 +1,16 @@
 import produce from 'immer';
 import { createAction, handleActions } from 'redux-actions';
 
-export const INSERTLIST = 'INSERTLIST';
-export const EDITLIST = 'EDITLIST';
-export const DELETELIST = 'DELETELIST';
-export const UPDATEBTNSTATE = 'UPDATEBTNSTATE';
-export const BACKBTN = 'BACKBTN';
+export const INSERT_LIST = "todo/EINSERT_LIST";
+export const EDIT_LIST = 'todo/EDIT_LIST';
+export const DELETE_LIST = 'todo/DELETE_LIST';
+export const UPDATE_EDIT_STATE = 'todo/UPDATE_EDIT_STATE';
 
 let listId = 5;
-export const insetList = createAction('INSERTLIST', test => test);
-export const editList = createAction('EDITLIST', data => data);
-export const deleteList = createAction('DELETELIST', id => id);
-export const updateBtnState = createAction('UPDATEBTNSTATE', id => id);
-export const backbtn = createAction('BACKBTN', data => data);
+export const insetList = createAction(INSERT_LIST, test => test);
+export const editList = createAction(EDIT_LIST, data => data);
+export const deleteList = createAction(DELETE_LIST, id => id);
+export const updateEditState = createAction(UPDATE_EDIT_STATE, id => id);
 
 const initState = [
     { title: 'Buy car signal lights', id: 1, btnCheck: true },
@@ -23,24 +21,24 @@ const initState = [
 
 //리듀서 생성
 export default handleActions({
-    [INSERTLIST]: (initState, action) => {
+    [INSERT_LIST]: (initState, action) => {
         return produce(initState, draft => {
             draft.push({ title: action.payload, id: listId++, btnCheck: false})
         })
     },
-    [DELETELIST]: (initState, action) => {
+    [DELETE_LIST]: (initState, action) => {
         return produce(initState, draft => {
             const idx = draft.findIndex((info) => info.id === action.payload);
             draft.splice(idx, 1)
         })
     },
-    [EDITLIST]: (initState, action) => {
+    [EDIT_LIST]: (initState, action) => {
         return produce(initState, draft => {
             const idx = draft.findIndex((info) => info.id === action.payload.data.id);
             draft[idx].title = action.payload.value;
         })
     },
-    [UPDATEBTNSTATE]: (initState, action) => {
+    [UPDATE_EDIT_STATE]: (initState, action) => {
         return produce(initState, draft => {
             const idx = draft.findIndex((info) => info.id === action.payload);
             if (draft[idx].btnCheck) {

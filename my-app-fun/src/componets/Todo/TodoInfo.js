@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { AiFillEdit, AiFillDelete } from "react-icons/ai";
-import { editList, updateBtnState, deleteList, backbtn } from '../../store/modules/Todo';
+import { editList, updateEditState, deleteList } from '../../store/modules/Todo';
 import { SpanLain, Button } from './Styled';
 
 function TodoInfo({ data }) {
@@ -10,7 +10,7 @@ function TodoInfo({ data }) {
     const [done, setDone] = useState(true);
 
     const handleCheckClick = (id) => {
-        dispatch(updateBtnState(id))
+        dispatch(updateEditState(id))
     }
 
     const handleOnChange = (e) => {
@@ -20,7 +20,7 @@ function TodoInfo({ data }) {
     const handleEditEventState = (list) => {
         if (data.btnCheck && data.id === list.id) {
             return false;
-        } else{
+        } else {
             setDone(false)
         }
     }
@@ -34,7 +34,7 @@ function TodoInfo({ data }) {
         setDone(true)
     }
 
-    const handleBackBtn =() => {
+    const handleBackBtn = () => {
         setDone(true)
     }
 
@@ -55,7 +55,7 @@ function TodoInfo({ data }) {
                 ) : (
                     <>
                         <label>
-                            <input type="checkBox" checked={data.btnCheck}/>
+                            <input type="checkBox" checked={data.btnCheck} />
                             <input type="text" onChange={handleOnChange} defaultValue={data.title} />
                         </label>
                         <div className="TodoList-content-icon">

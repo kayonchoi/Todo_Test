@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
-import  handleActions  from './Todo';
+import  todo  from './Todo';
 
 const rootReducres = combineReducers({
-    handleActions
+    todo
 });
 export default rootReducres;

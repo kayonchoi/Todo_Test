@@ -5,7 +5,7 @@ import { insetList } from './store/modules/Todo';
 import { Body, Input, Title } from './Styled';
 
 function App() {
-  const list = useSelector((state) => state.handleActions);
+  const list = useSelector((state) => state.todo);
   const dispatch = useDispatch();
   const [inputValue, setInptValue] = useState('');
 
@@ -17,7 +17,7 @@ function App() {
   }
 
   const handleChage = (e) => {
-    setInptValue(e.target.value);
+    setInptValue(e.currentTarget.value);
   }
 
   return (

@@ -1,37 +1,58 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import TodoList from './componets/Todo/TodoList';
-import { insetList } from './store/modules/Todo';
-import { Body, Input, Title } from './Styled';
+import { insertList } from './store/modules/Todo';
+import { Wrap, AppLabel, InsertListWrap } from './Styled';
 
 function App() {
   const list = useSelector((state) => state.todo);
   const dispatch = useDispatch();
-  const [inputValue, setInptValue] = useState('');
+  const [showListBox, setShowListBox] = useState(false);
+  const [inputList, setInputList] = useState('');
 
-  const handleOnKeyPress = (e) => {
+  const handleShowAddList = () => {
+    setShowListBox(true)
+  }
+
+  const handleBackAddList = e => {
+    e.stopPropagation();
+    setShowListBox(false);
+    setInputList('');
+  }
+
+  const handleChage = e => {
+    setInputList(e.currentTarget.value);
+  }
+
+  const handleAddList = e => {
     if (e.key === 'Enter') {
-      dispatch(insetList(inputValue));
-      setInptValue('');
+      dispatch(insertList(inputList));
+      setInputList('');
+      setShowListBox(false);
     }
   }
 
-  const handleChage = (e) => {
-    setInptValue(e.currentTarget.value);
-  }
-
   return (
-    <Body>
-      <div>
-        <Title>My Todo</Title>
-      </div>
-      <div>
-        <Input type="text" value={inputValue} placeholder="Input task name then tap Enter to add"
-          onKeyPress={handleOnKeyPress} onChange={handleChage}
+    <Wrap>
+      {list.map((data, index) => (
+        <TodoList
+          list={list}
+          titleId={data.titleId}
+          items={data.item}
+          key={index}
+          title={data.title}
         />
-      </div>
-      <TodoList list={list} />
-    </Body>
+      ))}
+      <InsertListWrap onClick={handleShowAddList}>
+        <AppLabel>+ Add a List</AppLabel>
+        {showListBox && (
+          <>
+            <input type="text" value={inputList} onChange={handleChage} onKeyPress={handleAddList} />
+            <button onClick={handleBackAddList}>취소</button>
+          </>
+        )}
+      </InsertListWrap>
+    </Wrap>
   );
 }
 export default App;

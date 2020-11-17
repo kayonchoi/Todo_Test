@@ -1,22 +1,16 @@
 import styled from 'styled-components';
 
-export const Body = styled.div`
-    margin: 10px;
-    width: 344px;
-    height: 380px;
-    border: 1px solid #bb8d8d;
-    background: #e6cccc;
-    border-radius: 8%;
+export const Wrap = styled.div`
+    display: flex
 `
-export const Input = styled.input`
-    margin: 10px;
-    width: 320px;
-    height: 25px;
-    border: 1px solid white;
-    border-radius: 5%;
+
+export const AppLabel = styled.label`
+    display: block;
 `
-export const Title = styled.h1`
-    margin: 10px;
-    font-size: 30px;
-    text-align : center;
+
+export const InsertListWrap = styled.div`
+    background: #5e94bd;
+    height: 50px;
+    border-radius: 3px;
+    box-shadow: 3px 5px 5px grey;
 `

@@ -36,7 +36,6 @@ function App() {
     <Wrap>
       {list.map((data, index) => (
         <TodoList
-          list={list}
           titleId={data.titleId}
           items={data.item}
           key={index}

@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import TodoItem from '../Todo/TodoItem';
-import TodoModal from '../Todo/TodoModal';
-import { insetItem, deleteList } from '../../store/modules/Todo';
 import { AiFillPlusCircle, AiOutlineClose } from "react-icons/ai";
+import TodoItem from '../Todo/TodoItem';
+import { insetItem, deleteList } from '../../store/modules/Todo';
 import { Lavel, ListWrap, ListAddIconDiv, ShowInput, ListDeleteIcon, ListH1, LitAddWrap } from './Styled';
 
-function TodoList({ title, items, titleId, list }) {
+function TodoList({ title, items, titleId }) {
   const dispatch = useDispatch();
   const [showInput, setShowInput] = useState(false);
   const [inputValue, setInputValue] = useState('');
@@ -28,13 +27,8 @@ function TodoList({ title, items, titleId, list }) {
   }
 
   const handleListDeleteClick = () => {
-    list.forEach(data => {
-      if (0 < data.item.length) {
-        return
-      } else {
-        dispatch(deleteList(data.titleId));
-      }
-    });
+    if (0 < items.length) return
+    dispatch(deleteList(titleId));
   }
 
   const handleBack = () => {
@@ -50,7 +44,6 @@ function TodoList({ title, items, titleId, list }) {
       <ListH1>{title}</ListH1>
       {items.map((item, index) => (
         <TodoItem
-          list={list}
           item={item}
           key={index}
           titleId={titleId}

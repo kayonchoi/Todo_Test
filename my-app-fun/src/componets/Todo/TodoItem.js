@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import TodoModal from './TodoModal';
 import { H2, Item } from './Styled';
 
-function TodoItem({ item, title, titleId, list }) {
+function TodoItem({ item, title, titleId }) {
   const [modalVisible, setModalVisible] = useState(false);
 
   const handleClickModal = () => {
@@ -20,7 +20,6 @@ function TodoItem({ item, title, titleId, list }) {
       </Item>
       {
         modalVisible && <TodoModal
-          list={list}
           titleId={titleId}
           title={title}
           item={item}

@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { AiOutlineClose } from "react-icons/ai";
-import { editItem, deleteItem } from '../../store/modules/Todo';
+import { editItem, deleteItem, editMoveItem } from '../../store/modules/Todo';
 import { ModalIcon, ModalH2, ModalNone, ModalWrap, ModalTitle, ModalInput, ModalBtn } from './Styled';
 
-function TodoModal({ title, item, titleId, list, handleClose }) {
+function TodoModal({ title, item, titleId, handleClose }) {
+  const list = useSelector((state) => state.todo);
   const dispatch = useDispatch();
   const [inputValue, setInputValue] = useState(item.item_title);
   const [selectValue, setSeleteValue] = useState(title);
@@ -14,7 +15,11 @@ function TodoModal({ title, item, titleId, list, handleClose }) {
   }
 
   const handleEditSubmit = () => {
-    dispatch(editItem({ value: inputValue, id: item.listId, titleId: titleId, titleName: selectValue }));
+    if(title === selectValue){
+      dispatch(editItem({ value: inputValue, id: item.listId, titleId: titleId, titleName: selectValue }));
+    }else{
+      dispatch(editMoveItem({ value: inputValue, id: item.listId, titleId: titleId, titleName: selectValue }));
+    }
     handleClose();
   }
 
@@ -35,7 +40,8 @@ function TodoModal({ title, item, titleId, list, handleClose }) {
           <AiOutlineClose onClick={handleClose} />
         </ModalIcon>
         <ModalTitle>
-          <p>상태 :
+          <p>
+            상태 :
             <select value={selectValue} onChange={handleSeleteChage}>
               {list.map((data, index) => (
                 <option key={index}>{data.title}</option>

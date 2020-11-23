@@ -7,8 +7,10 @@ import { createStore } from 'redux';
 const store = createStore(rootReducres, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
 
 ReactDOM.render(
-  <Provider store={store}>
+  <React.StrictMode>
+    <Provider store={store}>
       <App />
-   </Provider>,
+    </Provider>
+  </React.StrictMode>,
   document.getElementById('root')
 );

@@ -70,7 +70,7 @@ export const ModalNone = styled.div`
     left: 0;
     background: rgba(0, 0, 0, 0.6);
 `
-export const H2 = styled.h3`
+export const H3 = styled.h3`
     padding: 5px;
     
 `
@@ -82,7 +82,7 @@ export const ModalInput = styled.textarea`
     height: 130px;
 `
 export const ModalBtn = styled.div`
-    margin-top : 10px
+    margin-top : 10px;
 `
 export const ModalH2 = styled.h2`
     display : contents;
@@ -100,11 +100,11 @@ export const ListDeleteIcon = styled.div`
     float: right;
     margin: 10px 10px 5px 0px;
 `
-export const ListH1 = styled.h1`
-    margin-left: 16px;
-    font-size: 25px;
-`
 export const LitAddWrap = styled.div`
     margin: 10px 0px 5px 5px;
+`
+
+export const H2 = styled.h2`
+    display: none;
 `
  

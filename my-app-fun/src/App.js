@@ -5,24 +5,24 @@ import { insertList } from './store/modules/Todo';
 import { Wrap, AppLabel, InsertListWrap } from './Styled';
 
 function App() {
-  const list = useSelector((state) => state.todo);
+  const list = useSelector(state => state.todo);
   const dispatch = useDispatch();
   const [showListBox, setShowListBox] = useState(false);
   const [inputList, setInputList] = useState('');
 
   const handleShowAddList = () => {
-    setShowListBox(true)
-  }
+    setShowListBox(true);
+  };
 
   const handleBackAddList = e => {
     e.stopPropagation();
     setShowListBox(false);
     setInputList('');
-  }
+  };
 
   const handleChage = e => {
     setInputList(e.currentTarget.value);
-  }
+  };
 
   const handleAddList = e => {
     if (e.key === 'Enter') {
@@ -30,7 +30,7 @@ function App() {
       setInputList('');
       setShowListBox(false);
     }
-  }
+  };
 
   return (
     <Wrap>

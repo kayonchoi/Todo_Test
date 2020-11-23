@@ -33,6 +33,7 @@ function TodoModal({ title, item, titleId, handleClose }) {
     dispatch(deleteItem({ id: item.listId, titleId: titleId }));
     handleClose();
   };
+  
   return (
     <ReactSortable
       disabled={true} list={defultList ? list : []}

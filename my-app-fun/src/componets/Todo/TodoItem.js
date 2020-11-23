@@ -6,11 +6,7 @@ function TodoItem({ item, title, titleId }) {
   const [modalVisible, setModalVisible] = useState(false);
 
   const handleClickModal = () => {
-    setModalVisible(true);
-  };
-
-  const handleClose = () => {
-    setModalVisible(false);
+    setModalVisible(!modalVisible);
   };
 
   return (
@@ -18,17 +14,14 @@ function TodoItem({ item, title, titleId }) {
       <Item onClick={handleClickModal} data-id={item.listId} data-parent={titleId}>
         <H3>{item.item_title}</H3>
       </Item>
-      {
-        modalVisible &&
-        <>
-          <TodoModal
-            titleId={titleId}
-            title={title}
-            item={item}
-            handleClose={handleClose}
-          />
-        </>
-      }
+      {modalVisible && (
+         <TodoModal
+         titleId={titleId}
+         title={title}
+         item={item}
+         handleClose={handleClose}
+       />
+      )}
     </>
   );
 }

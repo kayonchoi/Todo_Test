@@ -40,7 +40,7 @@ function TodoList({ title, items, titleId }) {
   };
 
   const dragEnd = evt => {
-    let targetTitle = evt.to.getElementsByTagName('h2')[0].innerText;
+    const targetTitle = evt.to.getElementsByTagName('h2')[0].innerText;
     const parentId = evt.item.dataset.parent;
     const childId = evt.item.dataset.id;
     if (evt.pullMode) {
